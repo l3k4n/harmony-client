@@ -1,0 +1,5 @@
+.previewer {
+  position: relative;
+  height: 90vh;
+  overflow: hidden;
+}
