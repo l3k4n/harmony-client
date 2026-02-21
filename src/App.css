@@ -1,0 +1,66 @@
+:root {
+  /* navbar */
+  --navbar-width: 5rem;
+  --navbar-item-gap: 4rem;
+  --navbar-to-main-content-gap: 2rem;
+
+  /* main content */
+  --main-content-width: calc(100vw - (var(--navbar-width) + var(--navbar-to-main-content-gap)))
+}
+
+.app {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
+.app > nav {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: center;
+  background-color: #000;
+  padding: var(--navbar-item-gap) 0;
+  width: var(--navbar-width);
+}
+
+.app > nav > a {
+  text-decoration: none;
+  color: yellow;
+  margin-bottom: var(--navbar-item-gap);
+}
+
+.app > main {
+  width: var(--main-content-width);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.app > main > span {
+  background-color: red;
+}
+
+.row {
+  background-color: red;
+  height: 100px;
+}
+
+.row-item-list {
+  background-color: blue;
+  display: flex;
+  overflow-x: auto;
+}
+
+.row-item {
+  margin-right: 5px;
+  width: 300px;
+  height: 600px;
+  border-radius: 10px;
+}
+
+.row-item > img {
+  width: 100%;
+  height: 100%;
+  object-fit: fill;
+}
