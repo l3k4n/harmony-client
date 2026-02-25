@@ -19,7 +19,7 @@ export interface Category {
   shows: Show[];
 }
 
-const shows: Show[] = [
+export const shows: Show[] = [
   { id: 1, title: "Echoes of Tomorrow", genre: "Sci-Fi", rating: 9.2, year: 2025, image: "https://picsum.photos/seed/movie1/400/600", featured: true },
   { id: 2, title: "The Last Kingdom", genre: "Drama", rating: 8.8, year: 2024, image: "https://picsum.photos/seed/movie2/400/600" },
   { id: 3, title: "Midnight Runner", genre: "Action", rating: 8.5, year: 2024, image: "https://picsum.photos/seed/movie3/400/600" },

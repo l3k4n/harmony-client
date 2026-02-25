@@ -82,16 +82,14 @@ class SpatialNavigationContextRegistry {
           distance = targetBounds.left - startBounds.right;
           break;
 
-        case "down":
-          // -y and +y are inverted in dom
+        case "up":
           inLane = targetBounds.bottom <= startBounds.top &&
             targetBounds.right > startBounds.left &&
             targetBounds.left < startBounds.right;
           distance = startBounds.top - targetBounds.bottom;
           break;
 
-        case "up":
-          // -y and +y are inverted in dom
+        case "down":
           inLane = targetBounds.top >= startBounds.top &&
             targetBounds.right > startBounds.left &&
             targetBounds.left < startBounds.right;
@@ -110,6 +108,10 @@ class SpatialNavigationContextRegistry {
 
 export const Registry = new SpatialNavigationContextRegistry();
 
+// Note: This implementation of spatial navigation has 2 main constraints:
+// 1. The context container element *MUST* never collide with other contexts
+// 2. The path from one context to another must intersect in the movement direction
+// All in all for navigaiton to work properly contexts should intersect in at most 1 axis
 export class SpatialNavigationContext {
   container: () => HTMLElement;
   name: () => string;

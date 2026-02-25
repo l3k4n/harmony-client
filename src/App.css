@@ -44,7 +44,7 @@
 
 .app > nav > a {
   text-decoration: none;
-  color: yellow;
+  color: orange;
   margin-bottom: var(--navbar-item-gap);
 }
 
@@ -53,6 +53,9 @@
   height: 100%;
   overflow: hidden;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .preview-bg-img {
@@ -67,22 +70,15 @@
   width: 100%;
   height: 100%;
   background: linear-gradient(to right, #000 0%, #000c 40%, #0000 100%),
-              linear-gradient(to top, #000 10%, #0000 50%);
+              linear-gradient(to top, #000 20%, #0000 50%);
 }
 
 .preview-body {
-  --preview-body-position: 0.25; /* percentage from 0 to 1 */
-  position: sticky;
-  top: 0;
   width: 40%;
   height: var(--preview-body-height);
-  transform: translateY(calc(var(--main-content-height) * var(--preview-body-position)));
   transition: transform var(--preview-change-animation);
-  will-change: background-color; 
-}
-
-[data-preview-media-rows="true"] .preview-body {
-  --preview-body-position: 0.1;
+  /* slightly above center */
+  transform: translateY(calc((var(--main-content-height) - var(--preview-body-height)) / 2.5));
 }
 
 .preview-body-title {
@@ -134,18 +130,10 @@
 }
 
 .media-rows {
-  --media-row-position: 0.85; /* percentage from 0 to 1 */
-  position: absolute;
-  top: 0;
-  display: flex;
-  flex-direction: column;
-  transform: translateY(calc(var(--main-content-height) * var(--media-row-position)));
-  transition: transform var(--preview-change-animation);
   width: 100%;
-}
-
-[data-preview-media-rows="true"] .media-rows {
-  --media-row-position:  0.5;
+  height: calc(var(--media-row-item-height) * 1.5);
+  transform: translateY(var(--media-row-item-height));
+  transition: transform var(--preview-change-animation);
 }
 
 .row {
@@ -160,22 +148,12 @@
 }
 
 .row-item-list {
-  --focused-index: 0;
-  --unit-width: calc(var(--media-row-item-width) + var(--media-row-item-gap));
-  display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: var(--media-row-item-width); 
-  grid-auto-rows: var(--media-row-item-height); 
-  grid-column-gap: var(--media-row-item-gap);
-  transform: translateX(calc(-1 * var(--focused-index) * var(--unit-width)));
   transition: transform 0.3s;
-  width: max-content;
-  /* background-color: blue; */
 }
 
 .row-item {
-  /* width: var(--media-row-item-width); */
-  /* height: var(--media-row-item-height); */
+  width: var(--media-row-item-width);
+  height: var(--media-row-item-height);
   border-radius: 10px;
   box-sizing: border-box;
   border: 3px solid transparent;
@@ -192,3 +170,10 @@
   object-fit: fill;
 }
 
+[data-preview-mode="brief"] .preview-body {
+  transform: translateY(10vh);
+}
+
+[data-preview-mode="brief"] .media-rows {
+  transform: translateY(0);
+}

@@ -1,7 +1,8 @@
-import { createEffect, createSignal, For, onMount } from 'solid-js';
+import { createSignal, For, onMount } from 'solid-js';
 import { A } from '@solidjs/router'
-import { useActiveSpatialNavigationContext, useSpatialNavigationContext } from './lib/spatialnavigator/hooks';
-import { featuredShows } from './tmp_data';
+import { useActiveSpatialNavigationContext, useSpatialNavigationContext } from '@/lib/spatialnavigator/hooks';
+import ScrollableContainer from './components/scrollablecontainer';
+import { featuredShows, shows } from './tmp_data';
 import "./App.css"
 import "./App.focused.css"
 
@@ -10,8 +11,7 @@ function PreviewActions() {
   const ctx = useSpatialNavigationContext("preview-actions", () => container!);
 
   ctx.on("navigationEnter", () => {
-    ctx.focusElement(ctx.getLastFocusedElement() || ctx.container().children[0] as HTMLElement);
-    return true;
+    return ctx.focusElement(ctx.getLastFocusedElement() || ctx.container().children[0] as HTMLElement);
   });
 
   ctx.on("onDirection", (dir) => {
@@ -37,10 +37,10 @@ function PreviewActions() {
 
 function App() {
   const [activeContext, setActiveContext] = useActiveSpatialNavigationContext();
+  const [pos, setPos] = createSignal(0);
 
-  createEffect(() => {
-    console.log("active context changed", activeContext());
-  })
+  const preview_mode = () => activeContext() == "preview-actions" ? "showcase" : "brief";
+  const set_fn = (e: HTMLElement) => setPos(-e.offsetTop);
 
   // set default navigation context
   onMount(() => setActiveContext("preview-actions"));
@@ -54,7 +54,7 @@ function App() {
         <A href="/search">2</A>
         <A href="/other">3</A>
       </nav>
-      <main data-preview-media-rows={activeContext() && activeContext() != "preview-actions"}>
+      <main data-preview-mode={preview_mode()}>
         <img class="preview-bg-img" src={hero.backdrop} />
         <div class="preview-bg-overlay" />
 
@@ -73,61 +73,49 @@ function App() {
           <PreviewActions />
         </div>
 
+
         <div class="media-rows">
-          <For each={Array.from({ length: 4 })} children={(_, i) => <Row key={i()} />} />
+          <ScrollableContainer pos={pos} class="row-item-list" horizontal={false}>
+            <For each={Array.from({ length: 4 })} children={(_, i) => <Row key={i()} set={set_fn} />} />
+          </ScrollableContainer>
         </div>
       </main>
     </div>
   )
 }
 
-function RowItem() {
-  return (
-    <div class="row-item">
-      <img src="https://picsum.photos/seed/movie1/400/600" />
-    </div>
-  )
-}
+function Row(props: { key: number, set: (e: HTMLElement) => void; }) {
+  let row_container: HTMLDivElement | undefined;
+  let scroll_container: HTMLElement | undefined;
+  const ctx = useSpatialNavigationContext(props.key.toString(), () => scroll_container!);
+  const [scrollPos, setScrollPos] = createSignal(0);
 
-function Row(props: { key: number }) {
-  let container: HTMLTableRowElement | undefined;
-  const ctx = useSpatialNavigationContext("row" + props.key, () => container!);
-  const [focusedIndex, setFocusedIndex] = createSignal(0);
-
-  const focusRowItemElement = (element: HTMLElement | null) => {
-    if (!element || !ctx.focusElement(element)) return false;
-    const idx = Array.from(container!.children).indexOf(element);
-    setFocusedIndex(idx);
-    return true;
+  const updateFocusedElement = (next?: HTMLElement | null) => {
+    if (!next) return false;
+    setScrollPos(-next.offsetLeft);
+    props.set(row_container!);
+    return ctx.focusElement(next);
   }
+
+  ctx.on("navigationEnter", () => updateFocusedElement(
+    ctx.getLastFocusedElement() || ctx.container().children[0] as HTMLElement
+  ));
 
   ctx.on("onDirection", (dir) => {
     const focused = ctx.getFocusedElement()!;
-
     switch (dir) {
-      case "left":
-        return focusRowItemElement(focused.previousElementSibling as HTMLElement | null);
-      case "right":
-        return focusRowItemElement(focused.nextElementSibling as HTMLElement | null);
-      default:
-        return false;
+      case "left": return updateFocusedElement(focused.previousElementSibling as HTMLElement | undefined);
+      case "right": return updateFocusedElement(focused.nextElementSibling as HTMLElement | undefined);
+      default: return false;
     }
   });
 
-  ctx.on("navigationEnter", () => {
-    return focusRowItemElement(container!.children.item(focusedIndex()) as HTMLElement | null);
-  });
-
-  createEffect(() => {
-    focusRowItemElement(container!.children.item(focusedIndex()) as HTMLElement | null);
-  });
-
   return (
-    <div class="row">
+    <div class="row" ref={row_container}>
       <h3>Trending</h3>
-      <div class="row-item-list" ref={container} style={{ "--focused-index": focusedIndex() }}>
-        <For each={Array.from({ length: 20 })} children={() => <RowItem />} />
-      </div>
+      <ScrollableContainer pos={scrollPos} class="row-item-list" ref={scroll_container} horizontal={true}>
+        <For each={shows} children={(i) => <div class="row-item"><img src={i.image} /></div>} />
+      </ScrollableContainer>
     </div>
   )
 }
