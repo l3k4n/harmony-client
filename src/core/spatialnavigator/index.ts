@@ -15,6 +15,8 @@ function dispatchNavigationEvent(ev: SpatialNavigationInput) {
   }
 }
 
-export default {
+const SpatialNavigator = {
   dispatchNavigationEvent,
-};
+}
+
+export default SpatialNavigator;

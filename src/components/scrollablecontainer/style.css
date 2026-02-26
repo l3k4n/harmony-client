@@ -1,4 +1,8 @@
-.scrollable-container {
+.scroll-container-wrapper {
+  overflow: hidden;
+}
+
+.scroll-container {
   display: grid;
   min-width: 100%;
   width: max-content;
