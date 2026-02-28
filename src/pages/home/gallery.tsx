@@ -1,17 +1,21 @@
 import { For, createSignal } from 'solid-js';
+import type { Media } from '@api/types';
 import ScrollableContainer from '@components/scrollablecontainer';
 import { useSpatialNavigationContext } from '@core/spatialnavigator/hooks';
-import { shows } from '@core/tmp_data';
 
-export function Gallery() {
+interface GalleryProps {
+  categories: Media.Category[]
+}
+
+export function Gallery(props: GalleryProps) {
   const [pos, setPos] = createSignal(0);
   const scrollTo = (e: HTMLElement) => setPos(-e.offsetTop);
 
   return (
     <div class="gallery">
       <ScrollableContainer pos={pos} horizontal={false}>
-        <For each={Array.from({ length: 4 })}>
-          {(_, i) => <GalleryRow index={i()} focusElement={scrollTo} />}
+        <For each={props.categories}>
+          {(c) => <GalleryRow category={c} focusElement={scrollTo} />}
         </For>
       </ScrollableContainer>
     </div>
@@ -19,7 +23,7 @@ export function Gallery() {
 }
 
 interface GalleryRowProps {
-  index: number;
+  category: Media.Category,
   focusElement: (e: HTMLElement) => void;
 }
 
@@ -27,7 +31,7 @@ export function GalleryRow(props: GalleryRowProps) {
   let row_container: HTMLDivElement | undefined;
   let scroll_container: HTMLElement | undefined;
   const ctx = useSpatialNavigationContext(
-    `gallery-row-${props.index}`,
+    `gallery-row-${props.category.label}`,
     () => scroll_container!,
   );
   const [scrollPos, setScrollPos] = createSignal(0);
@@ -64,16 +68,16 @@ export function GalleryRow(props: GalleryRowProps) {
 
   return (
     <div class="gallery-row" ref={row_container}>
-      <h3>Trending</h3>
+      <h3>{props.category.label}</h3>
       <ScrollableContainer
         pos={scrollPos}
         ref={scroll_container}
         horizontal={true}
       >
-        <For each={shows}>
-          {(i) => (
+        <For each={props.category.media}>
+          {(m) => (
             <div class="gallery-row-item">
-              <img alt="" src={i.image} />
+              <img alt="" src={m.poster_url} />
             </div>
           )}
         </For>

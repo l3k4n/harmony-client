@@ -1,0 +1,147 @@
+.loader-wrapper {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 5s ease;
+  position: absolute;
+  top: 0;
+  z-index: 9999;
+}
+
+.fade-exit-active {
+  pointer-events: none;
+  transition: opacity 5s ease-in;
+}
+
+.fade-exit-to {
+  opacity: 0;
+}
+
+.fade-enter-setup {
+  opacity: 0;
+}
+
+.fade-enter-active {
+  transition: opacity 5s ease-out;
+}
+
+.fade-enter-to {
+  opacity: 1;
+}
+
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: lexend, sans-serif;
+  color: white;
+  margin-bottom: 20rem;
+
+  .logo {
+    display: flex;
+    align-items: center;
+    font-size: 7rem;
+    font-weight: 800;
+    letter-spacing: 0.01rem;
+  }
+
+  .blob {
+    width: 5rem;
+    height: 5rem;
+    margin: 0 0.5rem;
+    animation:
+      ultraMorph 1.5s ease-in-out infinite,
+      colorFlow 5s ease-in-out infinite,
+      spin 12s linear infinite;
+  }
+
+  .slider {
+    position: relative;
+    height: 0.5rem;
+    width: 30rem;
+    margin-top: 1rem;
+    border-radius: 1rem;
+    overflow: hidden;
+
+    .bar {
+      position: absolute;
+      inset: 0;
+      animation:
+        loadingLine 1.5s ease-in-out infinite,
+        colorFlow 5s ease-in-out infinite;
+    }
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes ultraMorph {
+  0%,
+  100% {
+    border-radius: 40% 60% 70% 30% / 35% 35% 65% 65%;
+    transform: scale(1) rotate(0deg);
+  }
+  20% {
+    border-radius: 85% 25% 85% 35% / 15% 75% 25% 85%;
+    transform: scale(1.05) rotate(4deg);
+  }
+  40% {
+    border-radius: 50% 50% 60% 40% / 40% 50% 50% 60%;
+    transform: scale(0.95) rotate(-6deg);
+  }
+  60% {
+    border-radius: 75% 75% 15% 35% / 80% 20% 30% 80%;
+    transform: scale(1.08) rotate(8deg);
+  }
+  80% {
+    border-radius: 40% 60% 40% 60% / 70% 50% 50% 50%;
+    transform: scale(0.97) rotate(-3deg);
+  }
+}
+
+@keyframes colorFlow {
+  0%,
+  100% {
+    background-color: #ee7752;
+  }
+  20% {
+    background-color: #e73c7e;
+  }
+  40% {
+    background-color: #a855f7;
+  }
+  60% {
+    background-color: #23a6d5;
+  }
+  80% {
+    background-color: #23d5ab;
+  }
+}
+
+@keyframes loadingLine {
+  0% {
+    transform: scaleX(0);
+    transform-origin: left;
+  }
+  45% {
+    transform: scaleX(1);
+    transform-origin: left;
+  }
+  50% {
+    transform: scaleX(1) scaleY(1.5);
+  }
+  55% {
+    transform: scaleX(1);
+    transform-origin: right;
+  }
+  100% {
+    transform: scaleX(0);
+    transform-origin: right;
+  }
+}

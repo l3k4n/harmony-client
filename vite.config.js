@@ -5,12 +5,14 @@ import { browserslistToTargets } from 'lightningcss';
 import path from 'path'
 
 export default defineConfig({
+  base: "/",
   plugins: [solid()],
   resolve: {
     alias: {
       '@components': path.resolve(__dirname, './src/components'),
       '@core': path.resolve(__dirname, './src/core'),
       '@pages': path.resolve(__dirname, './src/pages'),
+      '@api': path.resolve(__dirname, './src/api'),
     },
   },
   css: {
