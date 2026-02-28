@@ -10,7 +10,9 @@
   box-sizing: border-box;
 }
 
-html, body, #root {
+html,
+body,
+#root {
   width: 100vw;
   height: 100vh;
   padding: 0;
@@ -24,20 +26,21 @@ html, body, #root {
 }
 
 /* get consistent style on all platforms */
-button, a {
+button,
+a {
   background: none;
   border: none;
   padding: 0;
   margin: 0;
-  
+
   color: inherit;
   font: inherit;
   text-decoration: none;
-  
+
   display: inline-block;
-  cursor: pointer;     
-  outline: none;      
-  
+  cursor: pointer;
+  outline: none;
+
   white-space: nowrap;
 }
 

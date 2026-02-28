@@ -4,7 +4,7 @@ import ScrollableContainer from '@components/scrollablecontainer';
 import { useSpatialNavigationContext } from '@core/spatialnavigator/hooks';
 
 interface GalleryProps {
-  categories: Media.Category[]
+  categories: Media.Category[];
 }
 
 export function Gallery(props: GalleryProps) {
@@ -23,7 +23,7 @@ export function Gallery(props: GalleryProps) {
 }
 
 interface GalleryRowProps {
-  category: Media.Category,
+  category: Media.Category;
   focusElement: (e: HTMLElement) => void;
 }
 

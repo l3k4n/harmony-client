@@ -1,4 +1,4 @@
-import { SpatialDirection, SpatialNavigationEventMap } from "./types";
+import { SpatialDirection, SpatialNavigationEventMap } from './types';
 
 class SpatialNavigationContextRegistry {
   #internal_active_ctx: string | null = null;
@@ -30,12 +30,14 @@ class SpatialNavigationContextRegistry {
 
     if (this.#internal_active_ctx) {
       // release old context
-      this.#context_map.get(this.#internal_active_ctx)!.dispatch("navigationExit", null);
+      this.#context_map
+        .get(this.#internal_active_ctx)!
+        .dispatch('navigationExit', null);
     }
 
     // activate new context
     this.#internal_active_ctx = ctx.name();
-    ctx.dispatch("navigationEnter", null);
+    ctx.dispatch('navigationEnter', null);
     this.#context_change_listeners.forEach((cb) => cb(ctx.name()));
   }
 
@@ -68,29 +70,33 @@ class SpatialNavigationContextRegistry {
       let inLane = false;
 
       switch (dir) {
-        case "left":
-          inLane = targetBounds.right <= startBounds.left && // Is to the left
+        case 'left':
+          inLane =
+            targetBounds.right <= startBounds.left && // Is to the left
             targetBounds.bottom > startBounds.top &&
             targetBounds.top < startBounds.bottom;
           distance = startBounds.left - targetBounds.right;
           break;
 
-        case "right":
-          inLane = targetBounds.left >= startBounds.right && // Is to the right
+        case 'right':
+          inLane =
+            targetBounds.left >= startBounds.right && // Is to the right
             targetBounds.bottom > startBounds.top &&
             targetBounds.top < startBounds.bottom;
           distance = targetBounds.left - startBounds.right;
           break;
 
-        case "up":
-          inLane = targetBounds.bottom <= startBounds.top &&
+        case 'up':
+          inLane =
+            targetBounds.bottom <= startBounds.top &&
             targetBounds.right > startBounds.left &&
             targetBounds.left < startBounds.right;
           distance = startBounds.top - targetBounds.bottom;
           break;
 
-        case "down":
-          inLane = targetBounds.top >= startBounds.top &&
+        case 'down':
+          inLane =
+            targetBounds.top >= startBounds.top &&
             targetBounds.right > startBounds.left &&
             targetBounds.left < startBounds.right;
           distance = targetBounds.top - startBounds.bottom;
@@ -104,7 +110,7 @@ class SpatialNavigationContextRegistry {
     }
     return bestTarget;
   }
-};
+}
 
 export const Registry = new SpatialNavigationContextRegistry();
 
@@ -116,7 +122,9 @@ export class SpatialNavigationContext {
   container: () => HTMLElement;
   name: () => string;
   #event_map: {
-    [K in keyof SpatialNavigationEventMap]?: (data: SpatialNavigationEventMap[K]) => boolean;
+    [K in keyof SpatialNavigationEventMap]?: (
+      data: SpatialNavigationEventMap[K],
+    ) => boolean;
   } = {};
   #last_focused_element: HTMLElement | null = null;
 
@@ -127,7 +135,7 @@ export class SpatialNavigationContext {
 
   on<K extends keyof SpatialNavigationEventMap>(
     type: K,
-    callback: (data: SpatialNavigationEventMap[K]) => boolean
+    callback: (data: SpatialNavigationEventMap[K]) => boolean,
   ): void {
     // @ts-ignore
     this.#event_map[type] = callback;
@@ -135,17 +143,19 @@ export class SpatialNavigationContext {
 
   dispatch<K extends keyof SpatialNavigationEventMap>(
     type: K,
-    data: SpatialNavigationEventMap[K]
+    data: SpatialNavigationEventMap[K],
   ): void {
     if (!this.#event_map[type]) return;
 
-    if (type == "onDirection" || type == "onAction") {
+    if (type == 'onDirection' || type == 'onAction') {
       const focused = this.getFocusedElement();
       if (!focused || !this.container().contains(focused)) {
-        console.warn(`SpatialEvent type '${type}' decayed to a 'navigationEnter' event,`
-          + "because the context did not contain the focused element");
-        this.#event_map["navigationEnter"]?.(null);
-        return
+        console.warn(
+          `SpatialEvent type '${type}' decayed to a 'navigationEnter' event,` +
+            'because the context did not contain the focused element',
+        );
+        this.#event_map['navigationEnter']?.(null);
+        return;
       }
     }
 
@@ -154,15 +164,18 @@ export class SpatialNavigationContext {
 
     // handle when context fails to handle an event
 
-    if (type == "onDirection") {
-      const ctx = Registry.findTarget(this.container(), data as SpatialDirection);
+    if (type == 'onDirection') {
+      const ctx = Registry.findTarget(
+        this.container(),
+        data as SpatialDirection,
+      );
       if (ctx) {
         Registry.setActiveContext(ctx);
         return;
       }
     }
 
-    window.dispatchEvent(new Event("unhandledSpatialInput"))
+    window.dispatchEvent(new Event('unhandledSpatialInput'));
   }
 
   removeAllEvents(): void {
@@ -176,17 +189,19 @@ export class SpatialNavigationContext {
     // prevent focus leaving context
     if (!this.container().contains(element)) return false;
 
-    const prev = document.querySelector("[spatial-focus]")
-    if (prev) prev.removeAttribute("spatial-focus");
+    const prev = document.querySelector('[spatial-focus]');
+    if (prev) prev.removeAttribute('spatial-focus');
 
     element.focus();
-    element.setAttribute("spatial-focus", "");
+    element.setAttribute('spatial-focus', '');
     this.#last_focused_element = element;
-    return true
+    return true;
   }
 
   getFocusedElement() {
-    return this.container().querySelector("[spatial-focus]") as HTMLElement | null;
+    return this.container().querySelector(
+      '[spatial-focus]',
+    ) as HTMLElement | null;
   }
 
   getLastFocusedElement() {

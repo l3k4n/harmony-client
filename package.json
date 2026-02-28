@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "check": "npx @biomejs/biome check"
+    "format": "npx @biomejs/biome format ./src --write"
   },
   "dependencies": {
     "@faker-js/faker": "^10.3.0",

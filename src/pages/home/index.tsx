@@ -6,8 +6,8 @@ import { ShowcaseActions } from './showcaseactions';
 import './style.css';
 
 interface HomeProps {
- showcaseList: Media.Details[];
- categoryList: Media.Category[];
+  showcaseList: Media.Details[];
+  categoryList: Media.Category[];
 }
 
 export default function Home(props: HomeProps) {
@@ -35,7 +35,7 @@ export default function Home(props: HomeProps) {
             <li>{format_runtime(previewData().movie!.runtime_mins)}</li>
           </Show>
           <li>4K</li>
-          <li>{previewData().is_movie ? "M" : "S"}</li>
+          <li>{previewData().is_movie ? 'M' : 'S'}</li>
           <li>TV-PG</li>
           <Show when={!previewData().is_movie}>
             <li>{format_season_episodes(previewData().series!)}</li>
@@ -54,8 +54,8 @@ export default function Home(props: HomeProps) {
 }
 
 const format_year = (s: string) => {
-  return s ? new Date(s).getFullYear() : "BAD_DATE";
-}
+  return s ? new Date(s).getFullYear() : 'BAD_DATE';
+};
 
 const format_runtime = (r: number) => {
   const h = Math.floor(r / 60);
@@ -64,9 +64,9 @@ const format_runtime = (r: number) => {
   if (h && m) return `${h}h ${m}m`;
   else if (h) return `${h}h`;
   else return `${m}m`;
-}
+};
 
 const format_season_episodes = (s: Media.SeriesDetails) => {
   if (!s.mono_season) return `${s.seasons.length}`;
   return `${s.seasons.length ? s.seasons[0].episodes : 0} episodes`;
-}
+};

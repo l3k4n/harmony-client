@@ -32,10 +32,9 @@
       animation:
         ultraMorph 3s ease-in-out infinite,
         colorFlow 5s ease-in-out infinite;
-        /* spin 12s linear infinite; */
+      /* spin 12s linear infinite; */
     }
   }
-
 
   .slider {
     position: relative;
@@ -130,7 +129,8 @@
   transition: opacity 0.3s ease;
 }
 
-.loader-transition-enter, .loader-transition-exit-to {
+.loader-transition-enter,
+.loader-transition-exit-to {
   opacity: 0;
 }
 

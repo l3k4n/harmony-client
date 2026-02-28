@@ -4,7 +4,7 @@ import { Transition } from 'solid-transition-group';
 import './style.css';
 
 interface WithLoaderProps {
-  name: string
+  name: string;
   done: Accessor<boolean>;
   loader: Component;
   children: JSX.Element;

@@ -31,13 +31,14 @@ export namespace Media {
     release_date: string;
     series?: SeriesDetails;
     movie?: MovieDetails;
-  };
+  }
 
   export interface Category {
     label: string;
-    media: Summary[]
-  };
+    media: Summary[];
+  }
 
-  export type ApiResponse<T> = { success: true; data: T } | { success: false; err: string };
+  export type ApiResponse<T> =
+    | { success: true; data: T }
+    | { success: false; err: string };
 }
-

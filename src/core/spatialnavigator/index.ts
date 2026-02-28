@@ -1,22 +1,22 @@
-import type { SpatialNavigationInput } from "./types";
-import { Registry } from "./context";
+import type { SpatialNavigationInput } from './types';
+import { Registry } from './context';
 
 function dispatchNavigationEvent(ev: SpatialNavigationInput) {
   const ctx = Registry.getActiveContext();
   if (!ctx) return;
 
   switch (ev) {
-    case "enter":
-    case "back":
-      ctx.dispatch("onAction", ev);
+    case 'enter':
+    case 'back':
+      ctx.dispatch('onAction', ev);
       break;
     default:
-      ctx.dispatch("onDirection", ev);
+      ctx.dispatch('onDirection', ev);
   }
 }
 
 const SpatialNavigator = {
   dispatchNavigationEvent,
-}
+};
 
 export default SpatialNavigator;
