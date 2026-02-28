@@ -4,6 +4,7 @@ import { Transition } from 'solid-transition-group';
 import './style.css';
 
 interface WithLoaderProps {
+  name: string
   done: Accessor<boolean>;
   loader: Component;
   children: JSX.Element;
@@ -11,7 +12,7 @@ interface WithLoaderProps {
 
 export default function WithLoader(props: WithLoaderProps) {
   return (
-    <Transition name="fade">
+    <Transition name={props.name}>
       <Show
         when={props.done()}
         fallback={<props.loader />}

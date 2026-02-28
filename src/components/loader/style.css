@@ -10,57 +10,37 @@
   z-index: 9999;
 }
 
-.fade-exit-active {
-  pointer-events: none;
-  transition: opacity 5s ease-in;
-}
-
-.fade-exit-to {
-  opacity: 0;
-}
-
-.fade-enter-setup {
-  opacity: 0;
-}
-
-.fade-enter-active {
-  transition: opacity 5s ease-out;
-}
-
-.fade-enter-to {
-  opacity: 1;
-}
-
 .loader {
   display: flex;
   flex-direction: column;
   align-items: center;
   font-family: lexend, sans-serif;
   color: white;
-  margin-bottom: 20rem;
+  pointer-events: none;
 
   .logo {
     display: flex;
     align-items: center;
-    font-size: 7rem;
+    font-size: 5rem;
     font-weight: 800;
     letter-spacing: 0.01rem;
+
+    .blob {
+      width: 3rem;
+      height: 3rem;
+      margin: 0 0.5rem;
+      animation:
+        ultraMorph 3s ease-in-out infinite,
+        colorFlow 5s ease-in-out infinite;
+        /* spin 12s linear infinite; */
+    }
   }
 
-  .blob {
-    width: 5rem;
-    height: 5rem;
-    margin: 0 0.5rem;
-    animation:
-      ultraMorph 1.5s ease-in-out infinite,
-      colorFlow 5s ease-in-out infinite,
-      spin 12s linear infinite;
-  }
 
   .slider {
     position: relative;
     height: 0.5rem;
-    width: 30rem;
+    width: 20rem;
     margin-top: 1rem;
     border-radius: 1rem;
     overflow: hidden;
@@ -144,4 +124,20 @@
     transform: scaleX(0);
     transform-origin: right;
   }
+}
+
+.loader-transition-exit-active {
+  transition: opacity 0.3s ease;
+}
+
+.loader-transition-enter, .loader-transition-exit-to {
+  opacity: 0;
+}
+
+.loader-transition-enter-active {
+  transition: opacity 0.3s ease;
+  transition-delay: 0.3s;
+}
+.loader-transition-enter-to {
+  opacity: 1;
 }

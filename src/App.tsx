@@ -41,13 +41,13 @@ const [categoryList] = createResource(async () => {
 
 const [s, m] = createSignal(false);
 
-setTimeout(() => m(true), 5000);
+setTimeout(() => m(true), 1000);
 
 
 const ready = () => !showcaseList.loading && !categoryList.loading && s();
 
 render(() => (
-  <WithLoader done={ready} loader={PageLoader}>
+  <WithLoader name="loader-transition" done={ready} loader={PageLoader}>
     <Router root={App}>
       <Route path="/" component={() => <Home showcaseList={showcaseList()!} categoryList={categoryList()!} />} />
     </Router>

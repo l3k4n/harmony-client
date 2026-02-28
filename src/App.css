@@ -46,7 +46,6 @@ button, a {
   height: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: blue;
 
   > nav {
     display: flex;
