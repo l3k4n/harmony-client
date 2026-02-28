@@ -1,20 +1,16 @@
-import { createResource, createSignal, onMount } from 'solid-js';
+import { createResource, createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
 import type { RouteSectionProps } from '@solidjs/router';
 import { Router, Route, A } from '@solidjs/router';
 import { FetchCategoryList, FetchShowcaseList } from '@api/media';
 import WithLoader, { PageLoader } from '@components/loader';
 import SpatialNavigator from '@core/spatialnavigator';
-import { useActiveSpatialNavigationContext } from '@core/spatialnavigator/hooks';
 import type { SpatialNavigationInput } from '@core/spatialnavigator/types';
 import Home from '@pages/home';
+import Details from '@pages/details';
 import './App.css';
 
 function App(props: RouteSectionProps) {
-  // set default navigation context
-  const [_, setActiveContext] = useActiveSpatialNavigationContext();
-  onMount(() => setActiveContext('preview-actions'));
-
   return (
     <div class="page">
       <nav>
@@ -40,9 +36,7 @@ const [categoryList] = createResource(async () => {
 });
 
 const [s, m] = createSignal(false);
-
 setTimeout(() => m(true), 1000);
-
 const ready = () => !showcaseList.loading && !categoryList.loading && s();
 
 render(
@@ -58,6 +52,7 @@ render(
             />
           )}
         />
+        <Route path="/details/:id" component={Details} />
       </Router>
     </WithLoader>
   ),

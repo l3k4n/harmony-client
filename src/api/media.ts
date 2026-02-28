@@ -69,3 +69,7 @@ export async function FetchCategoryList(): Promise<
     })),
   };
 }
+
+export async function FetchDetails(id: string): Promise<Media.ApiResponse<Media.Details>> {
+  return { success: true, data: gen_details() };
+}

@@ -1,0 +1,84 @@
+.details-page {
+  width: 100%;
+  height: 100%;
+  background-color: red;
+  position: relative;
+  display: flex;
+  align-items: center;
+
+  .bg-img {
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bg-overlay {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, #000 0%, #000d 25%, #0003 100%);
+  }
+}
+
+.preview-body {
+  position: relative;
+  width: 40%;
+}
+
+.preview-body-title {
+  font-size: 6rem;
+  color: #fff;
+  margin: 0;
+}
+
+.preview-body-tags {
+  padding: 0;
+  margin: 2rem 0;
+
+  li {
+    display: inline;
+    color: #666;
+    font-size: 1.5rem;
+
+    &[data-genre] {
+      color: #fff;
+    }
+
+    &:not(:last-child)::after {
+      content: "•";
+      margin: 0 1rem;
+      color: rgba(255, 255, 255, 0.3);
+      pointer-events: none; /* Remote control ignores the dot */
+    }
+  }
+}
+
+.preview-body-desc {
+  color: #999;
+  font-size: 2rem;
+  font-weight: 400;
+  margin: 2rem 0;
+}
+
+.details-actions {
+  margin-top: 3rem;
+
+  button {
+    width: 40rem;
+    height: 6rem;
+    display: block;
+    font-size: 2rem;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    color: #ccc;
+    text-align: left;
+    padding: 0 3rem;
+    transition: background-color 0.3s ease, color 0.3s ease;
+
+    &[spatial-focus] {
+      color: #000;
+      background-color: #ccc;
+    }
+  }
+}

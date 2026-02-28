@@ -1,6 +1,7 @@
-import { createSignal, For, Show } from 'solid-js';
+import { createSignal, For, onMount, Show } from 'solid-js';
 import { useActiveSpatialNavigationContext } from '@core/spatialnavigator/hooks';
 import type { Media } from '@api/types';
+import format from '@api/format';
 import { Gallery } from './gallery';
 import { ShowcaseActions } from './showcaseactions';
 import './style.css';
@@ -12,7 +13,10 @@ interface HomeProps {
 
 export default function Home(props: HomeProps) {
   const [previewData] = createSignal(props.showcaseList[0]);
-  const [activeContext] = useActiveSpatialNavigationContext();
+  const [activeContext, setActiveContext] = useActiveSpatialNavigationContext();
+
+  // set default navigation context
+  onMount(() => setActiveContext('preview-actions'));
 
   const preview_mode = () => {
     return activeContext() == 'preview-actions' ? 'showcase' : 'brief';
@@ -30,15 +34,12 @@ export default function Home(props: HomeProps) {
       <div class="preview-body">
         <h1 class="preview-body-title">{previewData().title}</h1>
         <ul class="preview-body-tags">
-          <li>{format_year(previewData().release_date)}</li>
+          <li>{format.realease_year(previewData())}</li>
           <Show when={previewData().is_movie}>
-            <li>{format_runtime(previewData().movie!.runtime_mins)}</li>
+            <li>{format.runtime(previewData().movie!)}</li>
           </Show>
-          <li>4K</li>
-          <li>{previewData().is_movie ? 'M' : 'S'}</li>
-          <li>TV-PG</li>
           <Show when={!previewData().is_movie}>
-            <li>{format_season_episodes(previewData().series!)}</li>
+            <li>{format.num_season_episodes(previewData().series!)}</li>
           </Show>
           <For each={previewData().genres}>
             {(g) => <li data-genre>{g}</li>}
@@ -52,21 +53,3 @@ export default function Home(props: HomeProps) {
     </section>
   );
 }
-
-const format_year = (s: string) => {
-  return s ? new Date(s).getFullYear() : 'BAD_DATE';
-};
-
-const format_runtime = (r: number) => {
-  const h = Math.floor(r / 60);
-  const m = r % 60;
-
-  if (h && m) return `${h}h ${m}m`;
-  else if (h) return `${h}h`;
-  else return `${m}m`;
-};
-
-const format_season_episodes = (s: Media.SeriesDetails) => {
-  if (!s.mono_season) return `${s.seasons.length}`;
-  return `${s.seasons.length ? s.seasons[0].episodes : 0} episodes`;
-};
