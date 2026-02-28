@@ -7,10 +7,7 @@ export function useSpatialNavigationContext(
 ) {
   const ctx = new SpatialNavigationContext(name, container);
   Registry.register(name, ctx);
-  onCleanup(() => {
-    // TODO: find next focus target
-    // TODO: remove context from registry
-  });
+  onCleanup(() => Registry.remove(name));
   return ctx;
 }
 

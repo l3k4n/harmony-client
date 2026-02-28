@@ -1,5 +1,6 @@
 import { createResource, createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
+import { Transition } from 'solid-transition-group';
 import type { RouteSectionProps } from '@solidjs/router';
 import { Router, Route, A } from '@solidjs/router';
 import { FetchCategoryList, FetchShowcaseList } from '@api/media';
@@ -15,10 +16,12 @@ function App(props: RouteSectionProps) {
     <div class="page">
       <nav>
         <A href="/" textContent={1} />
-        <A href="/search" textContent={2} />
-        <A href="/other" textContent={3} />
+        <A href="/details/a" textContent={2} />
+        <A href="/search" textContent={3} />
       </nav>
-      <main>{props.children}</main>
+      <main>
+        <Transition name="route-transition">{props.children}</Transition>
+      </main>
     </div>
   );
 }

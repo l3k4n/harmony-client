@@ -1,4 +1,4 @@
-import { SpatialDirection, SpatialNavigationEventMap } from './types';
+import type { SpatialDirection, SpatialNavigationEventMap } from './types';
 
 class SpatialNavigationContextRegistry {
   #internal_active_ctx: string | null = null;
@@ -28,17 +28,17 @@ class SpatialNavigationContextRegistry {
   setActiveContext(ctx: SpatialNavigationContext) {
     if (ctx.name() == this.#internal_active_ctx) return;
 
-    if (this.#internal_active_ctx) {
-      // release old context
-      this.#context_map
-        .get(this.#internal_active_ctx)!
-        .dispatch('navigationExit', null);
+    // release old context
+    if (this.hasActiveContext()) {
+      this.getActiveContext()!.dispatch('navigationExit', null);
     }
 
     // activate new context
     this.#internal_active_ctx = ctx.name();
     ctx.dispatch('navigationEnter', null);
-    this.#context_change_listeners.forEach((cb) => cb(ctx.name()));
+    this.#context_change_listeners.forEach((cb) => {
+      cb(ctx.name());
+    });
   }
 
   register(name: string, ctx: SpatialNavigationContext) {
@@ -48,6 +48,25 @@ class SpatialNavigationContextRegistry {
     }
 
     this.#context_map.set(name, ctx);
+  }
+
+  remove(name: string) {
+    // find another context to pass focus to
+    let next: SpatialNavigationContext | null = null;
+    for (const [_name, _ctx] of this.#context_map) {
+      if (_name != name) next = _ctx;
+    }
+
+    if (this.isActive(name)) {
+      if (next) {
+        this.setActiveContext(next);
+      } else {
+        this.getActiveContext()!.dispatch('navigationExit', null);
+      }
+    }
+
+    this.#context_map.delete(name);
+    this.#internal_active_ctx = null;
   }
 
   context(name: string) {
@@ -137,8 +156,8 @@ export class SpatialNavigationContext {
     type: K,
     callback: (data: SpatialNavigationEventMap[K]) => boolean,
   ): void {
-    // @ts-ignore
-    this.#event_map[type] = callback;
+    type cb_fn = (data: SpatialNavigationEventMap[K]) => boolean;
+    (this.#event_map[type] as cb_fn) = callback;
   }
 
   dispatch<K extends keyof SpatialNavigationEventMap>(
@@ -152,9 +171,9 @@ export class SpatialNavigationContext {
       if (!focused || !this.container().contains(focused)) {
         console.warn(
           `SpatialEvent type '${type}' decayed to a 'navigationEnter' event,` +
-            'because the context did not contain the focused element',
+          'because the context did not contain the focused element',
         );
-        this.#event_map['navigationEnter']?.(null);
+        this.#event_map.navigationEnter?.(null);
         return;
       }
     }

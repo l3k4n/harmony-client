@@ -76,3 +76,22 @@ a {
     justify-content: space-between;
   }
 }
+
+.route-transition-enter-active,
+.route-transition-exit-active {
+  transition: opacity 0.3s ease;
+}
+
+.route-transition-enter,
+.route-transition-exit-to {
+  opacity: 0;
+}
+
+.route-transition-enter-to {
+  opacity: 1;
+}
+
+.route-transition-enter-active {
+  transition-delay: 0.3s;
+}
+
