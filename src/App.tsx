@@ -9,6 +9,7 @@ import SpatialNavigator from '@core/spatialnavigator';
 import type { SpatialNavigationInput } from '@core/spatialnavigator/types';
 import Home from '@pages/home';
 import Details from '@pages/details';
+import Watch from '@pages/watch';
 import './App.css';
 
 function App(props: RouteSectionProps) {
@@ -17,7 +18,7 @@ function App(props: RouteSectionProps) {
       <nav>
         <A href="/" textContent={1} />
         <A href="/details/a" textContent={2} />
-        <A href="/search" textContent={3} />
+        <A href="/watch/a" textContent={3} />
       </nav>
       <main>
         <Transition name="route-transition">{props.children}</Transition>
@@ -56,6 +57,7 @@ render(
           )}
         />
         <Route path="/details/:id" component={Details} />
+        <Route path="/watch/:id" component={Watch} />
       </Router>
     </WithLoader>
   ),
