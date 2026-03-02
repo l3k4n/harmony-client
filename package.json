@@ -12,7 +12,8 @@
     "@faker-js/faker": "^10.3.0",
     "@solidjs/router": "^0.15.4",
     "solid-js": "^1.9.10",
-    "solid-transition-group": "^0.3.0"
+    "solid-transition-group": "^0.3.0",
+    "video.js": "^8.23.7"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",

@@ -1,0 +1,243 @@
+:root {
+  --netflix-red: #e50914;
+  --control-bg: rgba(0, 0, 0, 0.75);
+  --transition-speed: 0.3s;
+}
+
+.video-container {
+  position: relative;
+  background-color: yellow;
+  margin: 30px;
+  width: 70%;
+  height: 50%;
+}
+
+.vjs-skin {
+  width: 50%;
+  height: 50%;
+  height: 300px;
+  font-size: 16px;
+  color: #fff;
+  position: relative;
+  background-color: green;
+  /* display: flex; */
+
+  video {
+    /* DO NOT SET HEIGHT, IT BREAKS ANCHORED CAPTIONS */
+    width: 100%;
+    background-color: teal;
+  }
+
+  div.vjs-poster {
+    opacity: 0;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+
+    picture,
+    img {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+  }
+
+  .vjs-text-track-cue {
+    div {
+      padding: 0.1em 0.5em;
+    }
+  }
+
+  .vjs-control-bar {
+    background-color: teal;
+
+    .vjs-control-text {
+      display: none;
+    }
+  }
+
+  .vjs-error-display {
+    display: none;
+  }
+
+  .vjs-loading-spinner {
+    width: 50%;
+    height: 50%;
+    background-color: orange;
+  }
+}
+
+.vjs-error {
+  .vjs-error-display {
+    background-color: blue;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: 70%;
+    width: 70%;
+    text-align: center;
+
+    .vjs-control-text {
+      display: none;
+    }
+  }
+}
+
+.x-off {
+  /* The Big Center Play Button */
+  .vjs-netflix-skin .vjs-big-play-button {
+    display: none !important; /* Netflix usually handles this via overlay or auto-hiding logic */
+  }
+
+  /* Control Bar Container */
+  .vjs-netflix-skin .vjs-control-bar {
+    display: flex;
+    height: 120px;
+    background: linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.5) 60%,
+      transparent 100%
+    );
+    align-items: center;
+    padding: 0 4%;
+    opacity: 0;
+    transform: translateY(20px);
+    transition:
+      opacity var(--transition-speed),
+      transform var(--transition-speed);
+    /* Hardware acceleration */
+    will-change: transform, opacity;
+  }
+
+  .vjs-netflix-skin.vjs-user-active .vjs-control-bar {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Seek Bar / Progress Control */
+  .vjs-netflix-skin .vjs-progress-control {
+    position: absolute;
+    top: 15px;
+    left: 4%;
+    right: 4%;
+    width: 92%;
+    height: 10px;
+    cursor: pointer;
+  }
+
+  /* Progress Bar Styling */
+  .vjs-netflix-skin .vjs-slider {
+    background-color: rgba(255, 255, 255, 0.3);
+    border-radius: 4px;
+  }
+
+  .vjs-netflix-skin .vjs-play-progress {
+    background-color: var(--netflix-red);
+    border-radius: 4px;
+  }
+
+  /* The "Knob" on the progress bar */
+  .vjs-netflix-skin .vjs-play-progress::before {
+    font-size: 1.5em;
+    color: var(--netflix-red);
+    top: -5px;
+    transition: transform 0.1s ease;
+  }
+
+  /* Buttons and Icons */
+  .vjs-netflix-skin .vjs-button {
+    width: 60px;
+    height: 60px;
+  }
+
+  .vjs-netflix-skin .vjs-icon-placeholder::before {
+    font-size: 2.5em;
+    line-height: 60px;
+  }
+
+  /* Time Display */
+  .vjs-netflix-skin .vjs-current-time,
+  .vjs-netflix-skin .vjs-duration,
+  .vjs-netflix-skin .vjs-time-divider,
+  .vjs-netflix-skin .vjs-remaining-time {
+    display: block;
+    font-size: 1.2em;
+    font-weight: bold;
+    line-height: 60px;
+    padding: 0 10px;
+  }
+
+  /* Netflix specific layout adjustments */
+  .vjs-netflix-skin .vjs-volume-panel {
+    order: 2;
+  }
+  .vjs-netflix-skin .vjs-play-control {
+    order: 1;
+  }
+  .vjs-netflix-skin .vjs-spacer {
+    order: 3;
+  }
+  .vjs-netflix-skin .vjs-fullscreen-control {
+    order: 4;
+  }
+
+  /* Video Title Overlay (Netflix style) */
+  .video-title-overlay {
+    position: absolute;
+    top: 10%;
+    left: 4%;
+    z-index: 10;
+    color: white;
+    opacity: 0;
+    transform: translateX(-20px);
+    transition:
+      opacity var(--transition-speed),
+      transform var(--transition-speed);
+    pointer-events: none;
+  }
+
+  .vjs-user-active .video-title-overlay {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .video-title-overlay h1 {
+    font-size: 3rem;
+    margin: 0;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  }
+
+  .video-title-overlay p {
+    font-size: 1.2rem;
+    margin-top: 5px;
+    color: #ccc;
+  }
+
+  /* Back Button */
+  .back-button {
+    position: absolute;
+    top: 30px;
+    left: 4%;
+    z-index: 11;
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity var(--transition-speed);
+  }
+
+  .vjs-user-active .back-button {
+    opacity: 1;
+  }
+
+  .back-button svg {
+    width: 40px;
+    height: 40px;
+    fill: white;
+  }
+
+  .vjs-user-inactive {
+    color: purple;
+  }
+}
