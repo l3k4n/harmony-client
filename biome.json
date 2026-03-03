@@ -8,10 +8,14 @@
       }
     }
   },
+
   "linter": {
     "enabled": true,
     "rules": {
       "recommended": true,
+      "a11y": {
+        "useMediaCaption": "off"
+      },
       "suspicious": {
         "noDoubleEquals": "off"
       },
