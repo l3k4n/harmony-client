@@ -76,9 +76,9 @@ export function GalleryRow(props: GalleryRowProps) {
       >
         <For each={props.category.media}>
           {(m) => (
-            <div class="gallery-row-item">
+            <button type="button" class="gallery-row-item">
               <img alt="" src={m.poster_url} />
-            </div>
+            </button>
           )}
         </For>
       </ScrollableContainer>

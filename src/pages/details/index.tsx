@@ -42,7 +42,7 @@ export default function Details() {
 						<For each={details()?.genres}>{(g) => <li data-genre>{g}</li>}</For>
 					</ul>
 					<p class="preview-body-desc">{details()?.description}</p>
-					<DetailsActions is_series={!details()?.is_movie} />
+					<DetailsActions id={params.id!} is_series={!details()?.is_movie} />
 				</div>
 			</section>
 		</WithLoader>
