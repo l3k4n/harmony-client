@@ -38,7 +38,7 @@
 
     width: 40%;
     height: var(--preview-body-height);
-    transition: transform 0.3s ease-out;
+    transition: transform 0.2s ease-out;
     /* slightly above center */
     transform: translateY(calc((100vh - var(--preview-body-height)) / 2.5));
   }
@@ -104,11 +104,11 @@
     width: 100%;
     height: calc(var(--gallery-item-height) * 1.5);
     transform: translateY(var(--gallery-item-height));
-    transition: transform 0.3s ease-out;
+    transition: transform 0.2s ease-out;
 
     .scroll-container {
       /* transition for vertical and horizontal scroll containers */
-      transition: transform 0.3s;
+      transition: transform 0.2s;
     }
 
     .gallery-row {

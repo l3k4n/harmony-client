@@ -1,16 +1,25 @@
-import { onMount } from 'solid-js';
+import { onCleanup, onMount } from 'solid-js';
 import { useBeforeLeave } from '@solidjs/router';
 import videojs from 'video.js';
 import { videojs_config } from './videojsconfig';
 import './videojscomponents';
 import './style.css';
 
+// Page transition makes onMount run too early, this is
+// a "temporary" fix until a better solution is available
+const onPageRender = (fn: () => void) => {
+	let timeout = -1;
+	onMount(() => {
+		timeout = window.setTimeout(fn, 300)
+	});
+	onCleanup(() => window.clearTimeout(timeout));
+}
+
 export default function Watch() {
 	let player_ref: HTMLVideoElement | undefined;
-	onMount(() => {
-		const player = videojs(player_ref!, videojs_config);
 
-		player.loadMedia(
+	onPageRender(() => {
+		videojs(player_ref!, videojs_config).loadMedia(
 			{
 				title: 'Oceans',
 				description: 'S1 E11: "Here comes the rain"',
@@ -52,18 +61,3 @@ export default function Watch() {
 		</section>
 	);
 }
-
-// function Watch() {
-// 	let player_ref: HTMLVideoElement | undefined;
-// 	onMount(() => {
-// 		// this throws err
-// 		const player = videojs('main-player', player_ref);
-//
-// 	});
-//
-// 	return (
-// 		<section class="watch-page">
-// 			<video ref={player_ref} id="main-player" class="video-js vjs-skin" />
-// 		</section>
-// 	);
-// }

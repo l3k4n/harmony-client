@@ -3,7 +3,7 @@ import { faker } from '@faker-js/faker';
 
 function gen_summary(): Media.Summary {
   return {
-    id: '',
+    id: faker.string.alphanumeric(10),
     title: faker.music.songName(),
     poster_url: faker.image.urlPicsumPhotos(),
     is_movie: faker.datatype.boolean(),

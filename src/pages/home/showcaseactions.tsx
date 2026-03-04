@@ -1,13 +1,16 @@
+import type { Accessor } from 'solid-js';
+import { useNavigate } from '@solidjs/router';
 import { useSpatialNavigationContext } from '@core/spatialnavigator/hooks';
 
-export function ShowcaseActions() {
+export function ShowcaseActions(props: { id: Accessor<string> }) {
   let container: HTMLDivElement | undefined;
   const ctx = useSpatialNavigationContext('preview-actions', () => container!);
+  const navigate = useNavigate();
 
   ctx.on('navigationEnter', () => {
     return ctx.focusElement(
       ctx.getLastFocusedElement() ||
-        (ctx.container().children[0] as HTMLElement),
+      (ctx.container().children[0] as HTMLElement),
     );
   });
 
@@ -28,10 +31,20 @@ export function ShowcaseActions() {
     }
   });
 
+  ctx.on('onAction', (action) => {
+    if (action != "enter") return false;
+    ctx.getFocusedElement()!.click();
+    return true;
+  });
+
   return (
     <div class="preview-body-actions" ref={container}>
-      <a href="/details">Play</a>
-      <button type="button">More Info</button>
+      <button type="button" onclick={() => navigate(`/watch/${props.id()}`)}>
+        Play
+      </button>
+      <button type="button" onclick={() => navigate(`/details/${props.id()}`)}>
+        More Info
+      </button>
     </div>
   );
 }

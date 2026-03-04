@@ -41,7 +41,7 @@ export default function Home() {
           </For>
         </ul>
         <p class="preview-body-desc">{previewData().description}</p>
-        <ShowcaseActions />
+        <ShowcaseActions id={() => previewData().id} />
       </div>
 
       <Gallery categories={categoryList()!} />
