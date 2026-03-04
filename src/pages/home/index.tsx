@@ -1,18 +1,13 @@
 import { createSignal, For, onMount, Show } from 'solid-js';
-import { useActiveSpatialNavigationContext } from '@core/spatialnavigator/hooks';
-import type { Media } from '@api/types';
 import format from '@api/format';
+import { useActiveSpatialNavigationContext } from '@core/spatialnavigator/hooks';
+import { categoryList, showcaseList } from '@resources/initialAppData';
 import { Gallery } from './gallery';
 import { ShowcaseActions } from './showcaseactions';
 import './style.css';
 
-interface HomeProps {
-  showcaseList: Media.Details[];
-  categoryList: Media.Category[];
-}
-
-export default function Home(props: HomeProps) {
-  const [previewData] = createSignal(props.showcaseList[0]);
+export default function Home() {
+  const [previewData] = createSignal(showcaseList()![0]);
   const [activeContext, setActiveContext] = useActiveSpatialNavigationContext();
 
   // set default navigation context
@@ -49,7 +44,7 @@ export default function Home(props: HomeProps) {
         <ShowcaseActions />
       </div>
 
-      <Gallery categories={props.categoryList} />
+      <Gallery categories={categoryList()!} />
     </section>
   );
 }

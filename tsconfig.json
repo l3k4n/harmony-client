@@ -18,6 +18,7 @@
     "noFallthroughCasesInSwitch": true,
     "paths": {
       "@components/*": ["./src/components/*"],
+      "@resources/*": ["./src/resources/*"],
       "@core/*": ["./src/core/*"],
       "@pages/*": ["./src/pages/*"],
       "@api/*": ["./src/api/*"]
