@@ -1,8 +1,6 @@
 import { createResource, createSignal } from 'solid-js';
 import { render } from 'solid-js/web';
-import { Transition } from 'solid-transition-group';
-import type { RouteSectionProps } from '@solidjs/router';
-import { Router, Route, A } from '@solidjs/router';
+import { Router, Route } from '@solidjs/router';
 import { FetchCategoryList, FetchShowcaseList } from '@api/media';
 import WithLoader, { PageLoader } from '@components/loader';
 import SpatialNavigator from '@core/spatialnavigator';
@@ -10,22 +8,8 @@ import type { SpatialNavigationInput } from '@core/spatialnavigator/types';
 import Home from '@pages/home';
 import Details from '@pages/details';
 import Watch from '@pages/watch';
+import { PageRoot, WithNav, WithoutNav } from './pagetemplate';
 import './App.css';
-
-function App(props: RouteSectionProps) {
-  return (
-    <div class="page">
-      <nav>
-        <A href="/" textContent={1} />
-        <A href="/details/a" textContent={2} />
-        <A href="/watch/a" textContent={3} />
-      </nav>
-      <main>
-        <Transition name="route-transition">{props.children}</Transition>
-      </main>
-    </div>
-  );
-}
 
 const [showcaseList] = createResource(async () => {
   const res = await FetchShowcaseList();
@@ -46,18 +30,22 @@ const ready = () => !showcaseList.loading && !categoryList.loading && s();
 render(
   () => (
     <WithLoader name="loader-transition" done={ready} loader={PageLoader}>
-      <Router root={App}>
-        <Route
-          path="/"
-          component={() => (
-            <Home
-              showcaseList={showcaseList()!}
-              categoryList={categoryList()!}
-            />
-          )}
-        />
-        <Route path="/details/:id" component={Details} />
-        <Route path="/watch/:id" component={Watch} />
+      <Router root={PageRoot}>
+        <Route component={WithNav}>
+          <Route
+            path="/"
+            component={() => (
+              <Home
+                showcaseList={showcaseList()!}
+                categoryList={categoryList()!}
+              />
+            )}
+          />
+          <Route path="/details/:id" component={Details} />
+        </Route>
+        <Route component={WithoutNav}>
+          <Route path="/watch/:id" component={Watch} />
+        </Route>
       </Router>
     </WithLoader>
   ),

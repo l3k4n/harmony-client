@@ -1,8 +1,4 @@
 :root {
-  /* content_width = page_width - (navbar_width + <gap>) */
-  --navbar-width: 5rem;
-  --main-content-width: calc(100vw - (var(--navbar-width) + 2rem));
-
   --spatial-focus-color: red;
 }
 
@@ -57,7 +53,8 @@ a {
     align-items: center;
     background-color: #000;
     padding: 4rem 0;
-    width: var(--navbar-width);
+    width: 5rem;
+    margin-right: 2rem;
 
     a {
       text-decoration: none;
@@ -67,7 +64,7 @@ a {
   }
 
   > main {
-    width: var(--main-content-width);
+    flex-grow: 1;
     height: 100%;
     overflow: hidden;
     position: relative;
@@ -77,21 +74,20 @@ a {
   }
 }
 
-.route-transition-enter-active,
-.route-transition-exit-active {
+.page-transition-enter-active,
+.page-transition-exit-active {
   transition: opacity 0.3s ease;
 }
 
-.route-transition-enter,
-.route-transition-exit-to {
+.page-transition-enter,
+.page-transition-exit-to {
   opacity: 0;
 }
 
-.route-transition-enter-to {
+.page-transition-enter-to {
   opacity: 1;
 }
 
-.route-transition-enter-active {
+.page-transition-enter-active {
   transition-delay: 0.3s;
 }
-
