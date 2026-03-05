@@ -1,4 +1,5 @@
 import { For, createSignal } from 'solid-js';
+import { useNavigate } from '@solidjs/router';
 import type { Media } from '@api/types';
 import ScrollableContainer from '@components/scrollablecontainer';
 import { useSpatialNavigationContext } from '@core/spatialnavigator/hooks';
@@ -30,11 +31,12 @@ interface GalleryRowProps {
 export function GalleryRow(props: GalleryRowProps) {
   let row_container: HTMLDivElement | undefined;
   let scroll_container: HTMLElement | undefined;
+  const [scrollPos, setScrollPos] = createSignal(0);
+  const navigate = useNavigate();
   const ctx = useSpatialNavigationContext(
     `gallery-row-${props.category.label}`,
     () => scroll_container!,
   );
-  const [scrollPos, setScrollPos] = createSignal(0);
 
   const updateFocusedElement = (next?: HTMLElement | null) => {
     if (!next) return false;
@@ -76,7 +78,7 @@ export function GalleryRow(props: GalleryRowProps) {
       >
         <For each={props.category.media}>
           {(m) => (
-            <button type="button" class="gallery-row-item">
+            <button type="button" onclick={() => navigate(`/details/${m.id}`)} class="gallery-row-item">
               <img alt="" src={m.poster_url} />
             </button>
           )}
