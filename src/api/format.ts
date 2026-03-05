@@ -7,7 +7,7 @@ const format = {
   },
 
   num_season_episodes: (s: Media.SeriesDetails) => {
-    if (!s.mono_season) return `${s.seasons.length}`;
+    if (!s.mono_season) return `${s.seasons.length} seasons`;
     return `${s.seasons.length ? s.seasons[0].episodes : 0} episodes`;
   },
 
