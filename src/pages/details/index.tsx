@@ -41,9 +41,14 @@ export default function Details() {
 						</Show>
 						<For each={details()?.genres}>{(g) => <li data-genre>{g}</li>}</For>
 					</ul>
-					<p class="preview-body-desc">{details()?.description}</p>
+					<p class="preview-body-desc">{format.description(details()?.description || "")}</p>
 					<DetailsActions id={params.id!} is_series={!details()?.is_movie} />
 				</div>
+				<Show when={!details()?.backdrop_url && details()?.poster_url}>
+					<div class="preview-img-fallback">
+						<img aria-label="poster image" src={details()?.poster_url} />
+					</div>
+				</Show>
 			</section>
 		</WithLoader>
 	);

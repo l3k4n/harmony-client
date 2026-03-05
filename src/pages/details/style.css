@@ -3,6 +3,7 @@
   height: 100%;
   position: absolute;
   display: flex;
+  justify-content: space-between;
   align-items: center;
 
   .bg-img {
@@ -60,6 +61,20 @@
   margin: 2rem 0;
 }
 
+.preview-img-fallback {
+  flex-grow: 1;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  img {
+    width: 50rem;
+    aspect-ratio: 2/3;
+    border-radius: 1rem;
+  }
+}
+
 .details-actions {
   margin-top: 3rem;
 
@@ -73,7 +88,9 @@
     color: #ccc;
     text-align: left;
     padding: 0 3rem;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    transition:
+      background-color 0.3s ease,
+      color 0.3s ease;
 
     &[spatial-focus] {
       color: #000;

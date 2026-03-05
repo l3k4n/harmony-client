@@ -1,5 +1,7 @@
 import type { Media } from './types';
 
+const MAX_DESCRIPTION_LENGTH = 200;
+
 const format = {
   realease_year: (d: Media.Details) => {
     if (!d.release_date) return 'BAD_DATE';
@@ -18,6 +20,11 @@ const format = {
     if (h && m) return `${h}h ${m}m`;
     else if (h) return `${h}h`;
     else return `${m}m`;
+  },
+
+  description: (s: string) => {
+    if (s.length <= MAX_DESCRIPTION_LENGTH) return s;
+    return `${s.slice(0, MAX_DESCRIPTION_LENGTH)}...`;
   },
 };
 
