@@ -211,7 +211,7 @@ export class SpatialNavigationContext {
     const prev = document.querySelector('[spatial-focus]');
     if (prev) prev.removeAttribute('spatial-focus');
 
-    element.focus();
+    element.focus({ preventScroll: true });
     element.setAttribute('spatial-focus', '');
     this.#last_focused_element = element;
     return true;

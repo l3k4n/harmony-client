@@ -59,11 +59,14 @@
       .vjs-custom-play-toggle {
         width: 2.4rem;
         height: 2.4rem;
-        background: url("/icons/play.png") no-repeat center;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: cover;
+        background-image: url("/icons/play.png");
         margin-right: 1rem;
 
         &.vjs-playing {
-          background: url("/icons/pause.png") no-repeat center;
+          background-image: url("/icons/pause.png");
         }
       }
 
@@ -87,7 +90,7 @@
         .vjs-progress-holder {
           width: 100%;
           height: 100%;
-          height: 5px;
+          height: 0.5rem;
           background-color: #555;
 
           .vjs-slider-bar {
@@ -129,8 +132,8 @@
 
       > div {
         --color: #ccc;
-        --thickness: 8px;
-        --radius: 100px;
+        --thickness: 0.5rem;
+        --radius: 10rem;
 
         width: var(--radius);
         height: var(--radius);

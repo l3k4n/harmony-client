@@ -1,4 +1,6 @@
 .details-page {
+  --spatial-focus-transition: 0.1s linear;
+
   width: 100%;
   height: 100%;
   position: absolute;
@@ -30,6 +32,7 @@
   font-size: 6rem;
   color: #fff;
   margin: 0;
+  width: 150%;
 }
 
 .preview-body-tags {
@@ -70,17 +73,18 @@
 
   img {
     width: 50rem;
-    aspect-ratio: 2/3;
+    aspect-ratio: 2 / 3;
     border-radius: 1rem;
   }
 }
 
 .details-actions {
-  margin-top: 3rem;
+  margin-top: 4rem;
 
   button {
     width: 40rem;
-    height: 6rem;
+    height: 5rem;
+    margin-bottom: 1rem;
     display: block;
     font-size: 2rem;
     border-radius: 0.5rem;
@@ -89,8 +93,8 @@
     text-align: left;
     padding: 0 3rem;
     transition:
-      background-color 0.3s ease,
-      color 0.3s ease;
+      background-color var(--spatial-focus-transition),
+      color var(--spatial-focus-transition);
 
     &[spatial-focus] {
       color: #000;

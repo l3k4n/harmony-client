@@ -5,7 +5,7 @@ function gen_summary(): Media.Summary {
   return {
     id: faker.string.alphanumeric(10),
     title: faker.music.songName(),
-    poster_url: faker.image.urlPicsumPhotos(),
+    poster_url: faker.image.urlPicsumPhotos({ width: 200, height: 300}),
     is_movie: faker.datatype.boolean(),
     is_adult: faker.datatype.boolean(),
   };
@@ -40,7 +40,7 @@ function gen_details(): Media.Details {
   return {
     ...summary,
     description: faker.lorem.paragraph(),
-    backdrop_url: faker.image.url(),
+    backdrop_url: faker.image.urlPicsumPhotos({ width: 1920, height: 1080}),
     status: 'STAT',
     genres: faker.helpers.arrayElements(
       ['Sci-Fi', 'Drama', 'Comedy', 'Horror', 'Action', 'Romance'],
@@ -63,9 +63,9 @@ export async function FetchCategoryList(): Promise<
 > {
   return {
     success: true,
-    data: Array.from({ length: 5 }, (_, i) => ({
+    data: Array.from({ length: 2 }, (_, i) => ({
       label: `category-${i}`,
-      media: Array.from({ length: 5 }, gen_summary),
+      media: Array.from({ length: 8 }, gen_summary),
     })),
   };
 }

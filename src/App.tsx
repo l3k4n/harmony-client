@@ -42,7 +42,10 @@ const keydown_map: Record<string, SpatialNavigationInput> = {
 
 window.addEventListener('keydown', (event) => {
   const nav_event = keydown_map[event.key];
-  if (nav_event) SpatialNavigator.dispatchNavigationEvent(nav_event);
+  if (nav_event) {
+    event.preventDefault();
+    SpatialNavigator.dispatchNavigationEvent(nav_event);
+  }
 });
 
 window.addEventListener('unhandledSpatialInput', () => {
