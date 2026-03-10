@@ -18,7 +18,11 @@ export default function Home() {
   };
 
   return (
-    <section class="home-page" data-preview-mode={preview_mode()}>
+    <section
+      class="home-page"
+      data-preview-mode={preview_mode()}
+      data-enable-scrollbars={!import.meta.env.VITE_TARGET_TV}
+    >
       <img
         aria-label="bg image"
         class="preview-bg-img"

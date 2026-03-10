@@ -5,10 +5,15 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:tv": "VITE_TARGET_TV=1 vite",
+    "format": "npx @biomejs/biome format ./src --write",
     "build": "vite build",
-    "format": "npx @biomejs/biome format ./src --write"
+    "build:android-tv": "VITE_TARGET_TV=1 vite build && npx cap sync && node scripts/check-env-android.js && npx cap build android"
   },
   "dependencies": {
+    "@capacitor/android": "^8.2.0",
+    "@capacitor/app": "^8.0.1",
+    "@capacitor/core": "^8.2.0",
     "@faker-js/faker": "^10.3.0",
     "@solidjs/router": "^0.15.4",
     "solid-js": "^1.9.10",
@@ -16,6 +21,7 @@
     "video.js": "^8.23.7"
   },
   "devDependencies": {
+    "@capacitor/cli": "^8.2.0",
     "@types/node": "^22.0.0",
     "browserlist": "^1.0.2",
     "lightningcss": "^1.31.1",

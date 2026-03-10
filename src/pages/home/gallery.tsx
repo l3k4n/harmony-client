@@ -8,6 +8,11 @@ interface GalleryProps {
   categories: Media.Category[];
 }
 
+interface GalleryRowProps {
+  category: Media.Category;
+  focusElement: (e: HTMLElement) => void;
+}
+
 export function Gallery(props: GalleryProps) {
   const [pos, setPos] = createSignal(0);
   const scrollTo = (e: HTMLElement) => setPos(-e.offsetTop);
@@ -21,11 +26,6 @@ export function Gallery(props: GalleryProps) {
       </ScrollableContainer>
     </div>
   );
-}
-
-interface GalleryRowProps {
-  category: Media.Category;
-  focusElement: (e: HTMLElement) => void;
 }
 
 export function GalleryRow(props: GalleryRowProps) {
@@ -48,7 +48,7 @@ export function GalleryRow(props: GalleryRowProps) {
   ctx.on('navigationEnter', () =>
     updateFocusedElement(
       ctx.getLastFocusedElement() ||
-        (ctx.container().children[0] as HTMLElement),
+      (ctx.container().children[0] as HTMLElement),
     ),
   );
 
@@ -75,10 +75,15 @@ export function GalleryRow(props: GalleryRowProps) {
         pos={scrollPos}
         ref={scroll_container}
         horizontal={true}
+        enable_scrollbars={!import.meta.env.VITE_TARGET_TV}
       >
         <For each={props.category.media}>
           {(m) => (
-            <button type="button" onclick={() => navigate(`/details/${m.id}`)} class="gallery-row-item">
+            <button
+              type="button"
+              onclick={() => navigate(`/details/${m.id}`)}
+              class="gallery-row-item"
+            >
               <img alt="" src={m.poster_url} />
             </button>
           )}

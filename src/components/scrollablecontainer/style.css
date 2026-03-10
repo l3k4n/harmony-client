@@ -3,10 +3,9 @@
 }
 
 .scroll-container {
-  display: grid;
-  min-width: 100%;
-  width: max-content;
-  height: max-content;
-  overflow: hidden;
-  justify-content: start;
+  display: flex;
+
+  > * {
+    flex-shrink: 0;
+  }
 }

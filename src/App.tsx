@@ -31,23 +31,25 @@ render(
   document.getElementById('root')!,
 );
 
-const keydown_map: Record<string, SpatialNavigationInput> = {
-  ArrowUp: 'up',
-  ArrowDown: 'down',
-  ArrowLeft: 'left',
-  ArrowRight: 'right',
-  Enter: 'enter',
-  Backspace: 'back',
-};
+if (import.meta.env.VITE_TARGET_TV) {
+  const keydown_map: Record<string, SpatialNavigationInput> = {
+    ArrowUp: 'up',
+    ArrowDown: 'down',
+    ArrowLeft: 'left',
+    ArrowRight: 'right',
+    Enter: 'enter',
+    Backspace: 'back',
+  };
 
-window.addEventListener('keydown', (event) => {
-  const nav_event = keydown_map[event.key];
-  if (nav_event) {
-    event.preventDefault();
-    SpatialNavigator.dispatchNavigationEvent(nav_event);
-  }
-});
+  window.addEventListener('keydown', (event) => {
+    const nav_event = keydown_map[event.key];
+    if (nav_event) {
+      event.preventDefault();
+      SpatialNavigator.dispatchNavigationEvent(nav_event);
+    }
+  });
 
-window.addEventListener('unhandledSpatialInput', () => {
-  console.log('Play earcon for unhandled spatial input');
-});
+  window.addEventListener('unhandledSpatialInput', () => {
+    console.log('Play earcon for unhandled spatial input');
+  });
+}

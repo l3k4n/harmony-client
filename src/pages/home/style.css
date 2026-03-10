@@ -9,16 +9,6 @@
   flex-direction: column;
   justify-content: space-between;
 
-  &[data-preview-mode="brief"] {
-    .preview-body {
-      transform: translateY(10vh);
-    }
-
-    .gallery {
-      transform: translateY(0);
-    }
-  }
-
   .preview-bg-img {
     position: absolute;
     display: block;
@@ -83,19 +73,28 @@
   .preview-body-actions {
     margin-top: 3rem;
 
-    a,
     button {
-      background-color: #ccc;
+      background-color: #333;
+      color: #888;
       font-size: 2rem;
       padding: 0.5rem 2rem;
       border-radius: 0.5rem;
       font-weight: 500;
       margin-right: 1rem;
-      transition: background-color var(--spatial-focus-transition);
+      transition:
+        background-color var(--spatial-focus-transition),
+        color var(--spatial-focus-transition);
     }
 
-    [spatial-focus] {
-      background-color: var(--spatial-focus-color);
+    button:first-child {
+      background-color: #bbb;
+      color: #000;
+    }
+
+    [spatial-focus],
+    :hover {
+      background-color: #fff !important;
+      color: #000 !important;
     }
   }
 
@@ -114,6 +113,11 @@
 
     .gallery-row {
       margin-bottom: 1rem;
+
+      &:last-child {
+        /* add a gap to make mouse scrolling a bit nicer */
+        margin-bottom: 5rem;
+      }
 
       h3 {
         font-size: 2rem;
@@ -140,10 +144,25 @@
           object-fit: fill;
         }
 
-        &[spatial-focus] {
-          border-color: var(--spatial-focus-color);
+        &[spatial-focus],
+        &:hover {
+          border-color: #fff;
         }
       }
     }
+  }
+}
+
+.home-page[data-enable-scrollbars="true"] {
+  overflow: auto;
+}
+
+.home-page[data-preview-mode="brief"] {
+  .preview-body {
+    transform: translateY(10vh);
+  }
+
+  .gallery {
+    transform: translateY(0);
   }
 }
