@@ -14,6 +14,7 @@ export default function Home() {
   onMount(() => setActiveContext('preview-actions'));
 
   const preview_mode = () => {
+    if (!import.meta.env.VITE_TARGET_TV) return "showcase";
     return activeContext() == 'preview-actions' ? 'showcase' : 'brief';
   };
 
