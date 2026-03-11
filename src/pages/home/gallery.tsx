@@ -1,7 +1,7 @@
 import { For, createSignal } from 'solid-js';
 import { useNavigate } from '@solidjs/router';
 import type { Media } from '@api/types';
-import ScrollableContainer from '@components/scrollablecontainer';
+import ScrollableContainer, { ScrollableContainer2 } from '@components/scrollablecontainer';
 import { useSpatialNavigationContext } from '@core/spatialnavigator/hooks';
 
 interface GalleryProps {
@@ -17,12 +17,14 @@ export function Gallery(props: GalleryProps) {
   const [pos, setPos] = createSignal(0);
   const scrollTo = (e: HTMLElement) => setPos(-e.offsetTop);
 
+  // <For each={props.categories}>
+  //   {(c) => <GalleryRow category={c} focusElement={scrollTo} />}
+  // </For>
+
   return (
     <div class="gallery">
       <ScrollableContainer pos={pos} horizontal={false}>
-        <For each={props.categories}>
-          {(c) => <GalleryRow category={c} focusElement={scrollTo} />}
-        </For>
+        <GalleryRow category={props.categories[0]} focusElement={scrollTo} />
       </ScrollableContainer>
     </div>
   );
@@ -71,24 +73,23 @@ export function GalleryRow(props: GalleryRowProps) {
   return (
     <div class="gallery-row" ref={row_container}>
       <h3>{props.category.label}</h3>
-      <ScrollableContainer
+      <ScrollableContainer2
         pos={scrollPos}
         ref={scroll_container}
         horizontal={true}
+        each={props.category.media}
         enable_scrollbars={!import.meta.env.VITE_TARGET_TV}
       >
-        <For each={props.category.media}>
-          {(m) => (
-            <button
-              type="button"
-              onclick={() => navigate(`/details/${m.id}`)}
-              class="gallery-row-item"
-            >
-              <img alt="" src={m.poster_url} />
-            </button>
-          )}
-        </For>
-      </ScrollableContainer>
+        {(m) => (
+          <button
+            type="button"
+            onclick={() => navigate(`/details/${m.id}`)}
+            class="gallery-row-item"
+          >
+            <img alt="" src={m.poster_url} />
+          </button>
+        )}
+      </ScrollableContainer2>
     </div>
   );
 }
