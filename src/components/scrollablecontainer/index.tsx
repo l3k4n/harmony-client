@@ -1,7 +1,7 @@
 import type { Accessor, JSX } from 'solid-js';
-import { batch, onMount, Index, createSignal, createEffect, on, onCleanup } from 'solid-js';
-import { createStore } from 'solid-js/store';
+import { createSignal, Index, onMount } from 'solid-js';
 import './style.css';
+import { useSpatialNavigationContext } from '@core/spatialnavigator/hooks';
 
 interface ScrollableContainerProps {
   ref?: HTMLElement | ((el: HTMLElement) => void) | undefined;
@@ -32,113 +32,94 @@ export default function ScrollableContainer(props: ScrollableContainerProps) {
   );
 }
 
-interface ScrollableContainerProps2<T> {
-  ref?: HTMLElement | ((el: HTMLElement) => void) | undefined;
-  enable_scrollbars?: boolean;
-  horizontal: boolean;
-  pos: Accessor<number>;
-
-  each?: T[];
+interface SpatialNavigationGalleryRowProps<T> {
+  each: T[];
+  start_index: number;
+  visible_window: number;
+  spatial_name: string;
+  on_focus?: (item: T) => void;
+  on_click?: (item: T) => void;
   children: (item: T) => JSX.Element;
 }
 
-export function ScrollableContainer2<T>(_: ScrollableContainerProps2<T>) {
-  const CARD_WIDTH = 200;
-  const CARD_GAP = 16;
-  const FULL_WIDTH = CARD_WIDTH + CARD_GAP;
-  const DATASET_SIZE = 20; // The "virtual" length (1 to 100)
-  const VISIBLE_WINDOW_SIZE = 12;     // The number of physical DOM nodes
-  const CYCLE_WIDTH = FULL_WIDTH * DATASET_SIZE;
+export function TvInfiniteGalleryRow<T>(props: SpatialNavigationGalleryRowProps<T>) {
+  // adds `OVERFLOW` items out of view, before and after all items,
+  // so the list never removes from the visible window
+  const OVERFLOW = 1;
 
-  function createTween(target: () => number, { ease = (t: number) => t, duration = 100 }): () => number {
-    const [current, setCurrent] = createSignal(target());
-    let start: number;
-    let startValue: number;
-    let delta: number;
-    let cancelId: number;
-
-    function tick(t: number) {
-      const elapsed = t - start;
-
-      if (elapsed < duration) {
-        setCurrent(startValue + ease(elapsed / duration) * delta);
-        cancelId = requestAnimationFrame(tick);
-      } else {
-        setCurrent(target());
-      }
-    }
-
-    createEffect(
-      on(
-        target,
-        () => {
-          start = performance.now();
-          startValue = current();
-          delta = target() - startValue;
-          cancelId = requestAnimationFrame(tick);
-          onCleanup(() => cancelAnimationFrame(cancelId));
-        },
-        { defer: true },
-      ),
-    );
-
-    return current;
-  }
-
-
-  const [scrollX, setScrollX] = createSignal(0);
-  const tweenedScrollX = createTween(scrollX, {
-    duration: 500,
-    ease: (t) => 0.5 - Math.cos(Math.PI * t) / 2
-  });
-  const [data, setData] = createStore(
-    Array.from({ length: VISIBLE_WINDOW_SIZE }).map((_, i) => ({ text: i + 1 }))
-  );
-
-  let container: HTMLDivElement | undefined;
-  let track: HTMLDivElement | undefined;
-  let startCardIdx = 0;
-
-  const run = (delta: number) => {
-    batch(() => {
-      const scrollCycleOffset = Math.max(0, (scrollX() + delta) % CYCLE_WIDTH);
-      const prevStartCardIdx = Math.floor(scrollCycleOffset / FULL_WIDTH);
-
-      setScrollX(scrollCycleOffset);
-
-      // only update the list items if start index changes
-      if (prevStartCardIdx != startCardIdx) {
-        startCardIdx = prevStartCardIdx;
-
-        for (let i = 0; i < VISIBLE_WINDOW_SIZE; i++) {
-          setData(i, "text", ((startCardIdx + i) % DATASET_SIZE) + 1);
-        }
-      }
-    })
-  }
+  let row: HTMLDivElement | undefined;
+  const [currentIndex, setCurrentIndex] = createSignal(props.start_index);
+  const [itemSize, setItemSize] = createSignal(0);
 
   onMount(() => {
-    const handleWheel = (e: WheelEvent) => {
-      e.preventDefault();
-      // window.requestAnimationFrame(() => run(e.deltaX));
-    };
+    // assuming every item has the same size
+    const el = get_element_ref(0);
+    setItemSize(el?.getBoundingClientRect()?.width || 0);
+  })
 
-    window.onkeydown = (e) => {
-      if (e.key == "ArrowRight") run(FULL_WIDTH);
-      if (e.key == "ArrowLeft") run(-FULL_WIDTH);
-    }
+  const get_virtual_index = (pos: number) => {
+    return currentIndex() - OVERFLOW + pos;
+  }
+
+  const get_scroll_offset_percent = () => (currentIndex() - 1) * 100;
+  const get_track_scroll_offset_percent = () => -currentIndex() * itemSize();
+
+  const get_item_index = (pos: number) => {
+    const len = props.each.length;
+    return ((get_virtual_index(pos) % len) + len) % len;
+  }
+
+  const get_element_ref = (pos: number) => {
+    return (row!.firstChild! as HTMLElement).children.item(pos) as HTMLElement | null;
+  }
+
+  const first_index_active = () => {
+    return get_item_index(0) == (props.each.length - OVERFLOW) % props.each.length
+  }
+
+  const ctx = useSpatialNavigationContext(props.spatial_name, () => row!);
+
+  ctx.on('navigationEnter', () => ctx.focusElement(get_element_ref(0 + OVERFLOW)));
+
+  ctx.on('onDirection', (dir) => {
+    if (dir != "left" && dir != "right") return false;
+    if (dir == "left" && first_index_active()) return false;
+    setCurrentIndex(currentIndex() + (dir == "left" ? -1 : 1));
+    props.on_focus?.(props.each[get_item_index(0 + OVERFLOW)])
+    return true;
   });
 
+  ctx.on('onAction', (action) => {
+    if (action == 'enter' && props.on_click) {
+      props.on_click(props.each[get_item_index(0 + OVERFLOW)]);
+      return true;
+    }
+
+    return false;
+  })
+
+  // never updates, only exists so solid creates the right number of nodes
+  const indices = Array.from({ length: props.visible_window + (OVERFLOW * 2) });
+
   return (
-    <div class="h-[200px] bg-gray-100 overflow-hidden relative">
-      <div ref={container} class="master-stage">
-        <div ref={track} class="virtual-track" style={{ transform: `translateX(${-tweenedScrollX() % FULL_WIDTH}px)` }}>
-          <Index
-            each={data}
-            children={(item) => <div class="card">Explorer #{item().text}</div>}
-          />
-        </div>
-      </div>
+    <div class="tv-gallery-row" ref={row}>
+      <div
+        class="tv-gallery-row-track"
+        style={{ transform: `translateX(${get_track_scroll_offset_percent()}px)` }}
+        children={
+          <Index each={indices}>
+            {(_, i) => (
+              <button
+                type="button"
+                class="tv-gallery-row-item"
+                style={{ transform: `translateX(${get_scroll_offset_percent()}%)` }}
+                children={props.children(props.each[get_item_index(i)])}
+              />
+            )}
+          </Index>
+        }
+      />
+      <div class="active-item-indicator" />
     </div>
   );
 }

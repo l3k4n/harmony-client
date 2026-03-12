@@ -107,8 +107,9 @@
     transform: translateY(var(--gallery-item-height));
     transition: transform var(--spatial-focus-transition);
 
-    .scroll-container {
+    .tv-gallery-row-track {
       transition: transform var(--spatial-focus-transition);
+      will-change: transform;
     }
 
     .gallery-row {

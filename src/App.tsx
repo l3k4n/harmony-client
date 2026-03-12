@@ -38,6 +38,7 @@ if (import.meta.env.VITE_TARGET_TV) {
     ArrowLeft: 'left',
     ArrowRight: 'right',
     Enter: 'enter',
+    ' ': 'enter',
     Backspace: 'back',
   };
 
